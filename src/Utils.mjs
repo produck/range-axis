@@ -6,7 +6,9 @@ export const defineOperator = (fn) => {
 	return (_a, _b) => {
 		const result = [];
 
-		fn(...[_a, _b].map(Axis.normalize), result);
+		if (_a.length + _b.length > 0) {
+			fn(...[_a, _b].map(Axis.normalize), result);
+		}
 
 		return result;
 	};

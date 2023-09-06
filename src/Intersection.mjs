@@ -2,12 +2,12 @@ import * as Utils from './Utils.mjs';
 
 export const operator = Utils.defineOperator((a, b, result) => {
 	const merged = [...a, ...b].sort(Utils.ASC);
-	const reference = merged.shift();
+	const reference = [...merged.shift()];
 
 	while (merged.length > 0) {
-		const range = merged.shift();
+		const range = [...merged.shift()];
 
-		if (range[0] <= reference[1]) {
+		if (range[0] <= reference[1]) { // sensitive =?
 			reference[0] = range[0];
 
 			if (range[1] <= reference[1]) {

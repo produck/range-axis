@@ -1,13 +1,12 @@
 import * as Utils from './Utils.mjs';
 
-export const HEAD = [-Infinity, -Infinity];
-export const TAIL = [Infinity, Infinity];
-
 export const operator = Utils.defineOperator((a, b, result) => {
-	const merged = [...a, ...b, TAIL].sort(Utils.ASC);
-	const reference = [...HEAD];
+	const merged = [...a, ...b].sort(Utils.ASC);
+	const reference = [...merged.shift()];
 
-	for (const range of merged) {
+	while(merged.length > 0) {
+		const range = merged.shift();
+
 		if (range[0] > reference[1]) {
 			result.push([...reference]);
 			reference[0] = range[0];
@@ -18,5 +17,5 @@ export const operator = Utils.defineOperator((a, b, result) => {
 		}
 	}
 
-	result.shift();
+	result.push([...reference]);
 });

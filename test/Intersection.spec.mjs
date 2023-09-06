@@ -4,7 +4,7 @@ import * as RangeAxis from '../src/index.mjs';
 
 const { stringify } = JSON;
 
-describe.only('::Union()', function () {
+describe('::Intersection()', function () {
 	[{
 		a: [[0, 2], [5, 7]],
 		b: [[1, 6]],
@@ -22,6 +22,10 @@ describe.only('::Union()', function () {
 		b: [],
 		r: [],
 	}, {
+		a: [[1, 100]],
+		b: [],
+		r: [],
+	}, {
 		a: [[1, 1], [2, 3]],
 		b: [[1, 6]],
 		r: [[1, 1], [2, 3]],
@@ -32,7 +36,7 @@ describe.only('::Union()', function () {
 	}].slice(0).forEach(question => {
 		const { a, b, r } = question;
 
-		it(`should ${stringify(a)}∪${stringify(b)}=${stringify(r)}.`, function () {
+		it(`should ${stringify(a)}∩${stringify(b)}=${stringify(r)}.`, function () {
 			assert.deepEqual(RangeAxis.Intersection(a, b), r);
 		});
 	});
