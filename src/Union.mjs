@@ -1,25 +1,22 @@
-import { Axis } from './Structure/index.mjs';
+import * as Utils from './Utils.mjs';
 
-const ASC = (a, b) => a[0] - b[0] || a[1] - b[1];
-const HEAD = [-Infinity, -Infinity];
-const TAIL = [Infinity, Infinity];
+export const HEAD = [-Infinity, -Infinity];
+export const TAIL = [Infinity, Infinity];
 
-export const operator = (_a, _b) => {
-	const a = Axis.normalize(_a), b = Axis.normalize(_b);
-	const target = [...HEAD], result = [];
+export const operator = Utils.defineOperator((a, b, result) => {
+	const merged = [...a, ...b, TAIL].sort(Utils.ASC);
+	const reference = [...HEAD];
 
-	for (const range of [...a, ...b, TAIL].sort(ASC)) {
-		if (range[0] > target[1]) {
-			result.push([...target]);
-			target[0] = range[0];
+	for (const range of merged) {
+		if (range[0] > reference[1]) {
+			result.push([...reference]);
+			reference[0] = range[0];
 		}
 
-		if (range[1] > target[1]) {
-			target[1] = range[1];
+		if (range[1] > reference[1]) {
+			reference[1] = range[1];
 		}
 	}
 
 	result.shift();
-
-	return result;
-};
+});
