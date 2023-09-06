@@ -1,0 +1,30 @@
+{
+	"name": "@produck/range-axis",
+	"version": "0.0.0",
+	"description": "To compute axis which some integer ranges on it",
+	"main": "src/index.gen.cjs",
+	"exports": {
+		"import": "./src/index.mjs",
+		"require": "./src/index.gen.cjs"
+	},
+	"type": "module",
+	"types": "./src/index.d.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"range",
+		"axis",
+		"operator"
+	],
+	"author": "ChaosLee",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/mocha": "^10.0.1",
+		"@types/node": "^20.5.9",
+		"c8": "^8.0.1",
+		"eslint": "^8.48.0",
+		"mocha": "^10.2.0",
+		"rollup": "^3.28.1"
+	}
+}
