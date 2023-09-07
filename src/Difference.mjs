@@ -1,16 +1,7 @@
 import * as Utils from './Utils.mjs';
 
-/**
- * A: |-------|  |--------|   |---|
- * B:     |--------| |--|   |-------|
- * R: |---|        |-|  |-|
- */
 export const operator = Utils.defineOperator((A, B, Result) => {
 	const a = [], b = [], need = [true, true];
-
-	if (A.length === 0) {
-		return;
-	}
 
 	while (A.length > 0 && B.length > 0) {
 		if (need[0]) {

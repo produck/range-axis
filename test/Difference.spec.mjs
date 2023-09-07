@@ -4,7 +4,7 @@ import * as RangeAxis from '../src/index.mjs';
 
 const { stringify } = JSON;
 
-describe.only('::Difference()', function () {
+describe('::Difference()', function () {
 	[{
 		a: [],
 		b: [],
