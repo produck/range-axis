@@ -1,7 +1,7 @@
 import * as Utils from './Utils.mjs';
 
-export const operator = Utils.defineOperator((a, b, result) => {
-	const merged = [...a, ...b].sort(Utils.ASC);
+export const operator = Utils.defineOperator((A, B, Result) => {
+	const merged = [...A, ...B].sort(Utils.ASC);
 	const reference = [...merged.shift()];
 
 	while (merged.length > 0) {
@@ -11,15 +11,15 @@ export const operator = Utils.defineOperator((a, b, result) => {
 			reference[0] = range[0];
 
 			if (range[1] <= reference[1]) {
-				result.push([...range]);
+				Result.push([...range]);
 				reference[0] = range[1];
 			} else {
-				result.push([...reference]);
+				Result.push([...reference]);
 				reference[0] = reference[1];
 				reference[1] = range[1];
 			}
 		} else {
-			Object.assign(reference, range);
+			[reference[0], reference[1]] = range;
 		}
 	}
 });

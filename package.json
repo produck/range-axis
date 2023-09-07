@@ -10,7 +10,8 @@
 	"type": "module",
 	"types": "./src/index.d.ts",
 	"scripts": {
-		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999"
+		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999",
+		"coverage": "c8 --exclude=**/*.spec.mjs --exclude=**/test/**/* --reporter=lcov npm run test"
 	},
 	"keywords": [
 		"range",
