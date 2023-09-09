@@ -4,18 +4,18 @@ import * as RangeAxis from '../src/index.mjs';
 
 const { stringify } = JSON;
 
-describe.only('::Difference()', function () {
+describe('::Difference()', function () {
 	[{
 		a: [],
 		b: [],
 		r: [],
 	}, {
-		a: [[1, 100]],
+		a: [[1, 10]],
 		b: [],
-		r: [[1, 100]],
+		r: [[1, 10]],
 	}, {
 		a: [],
-		b: [[1, 100]],
+		b: [[1, 10]],
 		r: [],
 	}, {
 		a: [[0, 10]],
@@ -61,7 +61,7 @@ describe.only('::Difference()', function () {
 			b: [...b.map(range => [...range])],
 		};
 
-		it(`should ${stringify(a)}∩${stringify(b)}=${stringify(r)}.`, function () {
+		it(`should ${stringify(a)}-${stringify(b)}=${stringify(r)}.`, function () {
 			assert.deepEqual(a, clone.a);
 			assert.deepEqual(b, clone.b);
 			assert.deepEqual(RangeAxis.Difference(a, b), r);
