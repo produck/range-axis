@@ -22,5 +22,5 @@ export const assert = any => {
 export const normalize = range => {
 	assert(range);
 
-	return isSimpleRange(range) ? [range] : range.slice(0);
+	return isSimpleRange(range) ? [range] : [...range];
 };

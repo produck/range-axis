@@ -4,7 +4,7 @@ import * as RangeAxis from '../src/index.mjs';
 
 const { stringify } = JSON;
 
-describe.only('::Intersection()', function () {
+describe('::Intersection()', function () {
 	[{
 		a: [[0, 2], [5, 7]],
 		b: [[1, 6]],

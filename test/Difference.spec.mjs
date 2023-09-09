@@ -4,7 +4,7 @@ import * as RangeAxis from '../src/index.mjs';
 
 const { stringify } = JSON;
 
-describe('::Difference()', function () {
+describe.only('::Difference()', function () {
 	[{
 		a: [],
 		b: [],
@@ -26,7 +26,7 @@ describe('::Difference()', function () {
 		b: [[0, 3]],
 		r: [[5, 8]],
 	}, {
-		a: [[3,5]],
+		a: [[3, 5]],
 		b: [[0, 8]],
 		r: [],
 	}, {
@@ -48,7 +48,14 @@ describe('::Difference()', function () {
 	}].slice(0).forEach(question => {
 		const { a, b, r } = question;
 
+		const clone = {
+			a: [...a.map(range => [...range])],
+			b: [...b.map(range => [...range])],
+		};
+
 		it(`should ${stringify(a)}∩${stringify(b)}=${stringify(r)}.`, function () {
+			assert.deepEqual(a, clone.a);
+			assert.deepEqual(b, clone.b);
 			assert.deepEqual(RangeAxis.Difference(a, b), r);
 		});
 	});
