@@ -1,59 +1,27 @@
 import * as Utils from './Utils.mjs';
 
+const TOP = 0, FROM = 0, TO = 1;
+
 export const operator = Utils.defineOperator((A, B, Result) => {
-	const a = [], b = [], need = [true, true];
-
-	while (A.length > 0 && B.length > 0) {
-		if (need[0]) {
-			[a[0], a[1]] = A.shift();
-			need[0] = false;
+	while (A.length > 0) {
+		if (B.length === 0) {
+			return Result.push(...A);
 		}
 
-		if (need[1]) {
-			[b[0], b[1]] = B.shift();
-			need[1] = false;
+		if (B[TOP][FROM] >= A[TOP][TO]) {
+			Result.push(A.shift());
 		}
 
-		if (a[1] < b[0]) {
-			// A: |--|
-			// B:      |-------|
-			Result.push([...a]);
-			need[0] = true;
-		} else if (a[0] > b[1]) {
-			// A:           |--|
-			// B: |-------|
-			need[1] = true;
-
-			if (B.length === 0) {
-				Result.push([...a]);
+		while (B.length > 0 && A.length > 0 && B[TOP][FROM] < A[TOP][TO]) {
+			if (B[TOP][FROM] > A[TOP][FROM]) {
+				Result.push([A[TOP][FROM], B[TOP][FROM]]);
 			}
-		} else if (a[0] > b[0] && a[1] < b[1]) {
-			// A:   |--|
-			// B: |-------|
-			need[0] = true;
-		} else if (a[0] < b[0] && a[1] < b[1]) {
-			// A: |----|
-			// B:    |-----|
-			Result.push([a[0], b[0]]);
-			need[0] = true;
-		} else if (a[0] < b[0] && a[1] > b[1]) {
-			// A: |-------------|
-			// B:    |-----|
-			Result.push([a[0], b[0]]);
-			a[0] = b[1];
 
-			if (B.length === 0) {
-				Result.push([...a]);
+			if (B[TOP][TO] > A[TOP][FROM] && B[TOP][TO] < A[TOP][TO]) {
+				A[TOP][FROM] = B[TOP][TO];
 			}
-		} else if (a[0] > b[0] && a[1] > b[1]) {
-			// A:        |------|
-			// B:    |-----|
-			Result.push([b[1], a[1]]);
-			a[0] = b[1];
-		}
-	}
 
-	if (A.length > 0) {
-		Result.push(...A);
+			(B[TOP][TO] <= A[TOP][TO] ? B : A).shift();
+		}
 	}
 });
