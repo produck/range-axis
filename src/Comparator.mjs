@@ -1,5 +1,3 @@
-const { isFinite, isNaN } = Number;
-
 export class RangeAxisComparator {
 	#tolerance = 0.000001;
 
@@ -8,10 +6,6 @@ export class RangeAxisComparator {
 	}
 
 	set tolerance(value) {
-		if (typeof value !== 'number' || isNaN(value) || isFinite(value)) {
-			throw new TypeError('Invalid ".tolerance", one "numeric" expected.');
-		}
-
 		this.#tolerance = value;
 	}
 

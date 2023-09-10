@@ -1,16 +1,15 @@
 import * as Utils from './Utils.mjs';
-
-const { isInteger } = Number;
+import * as Boundary from './Boundary.mjs';
 
 const SPEC_LIST = [
 	Array.isArray,
 	range => range.length === 2,
-	range => range.every(isInteger),
+	range => range.every(Boundary.isBoundary),
 	range => range[0] <= range[1],
 ];
 
 export const isTupleRange = any => SPEC_LIST.every(Utils.MATCHED, any);
-export const isSimpleRange = isInteger;
+export const isSimpleRange = Boundary.isBoundary;
 export const isRange = any => isSimpleRange(any) || isTupleRange(any);
 
 export const assert = any => {
@@ -22,5 +21,5 @@ export const assert = any => {
 export const normalize = range => {
 	assert(range);
 
-	return isSimpleRange(range) ? [range] : [...range];
+	return isSimpleRange(range) ? [range, range] : [...range];
 };

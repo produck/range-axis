@@ -1,6 +1,6 @@
 import * as Utils from './Utils.mjs';
 
-export const operator = Utils.defineOperator((A, B, Result) => {
+export const operator = (A, B, Result, {}) => {
 	const merged = [...A, ...B].sort(Utils.ASC);
 	let [from, to] = merged.shift();
 
@@ -18,4 +18,4 @@ export const operator = Utils.defineOperator((A, B, Result) => {
 	}
 
 	Result.push([from, to]);
-});
+};

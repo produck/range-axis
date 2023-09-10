@@ -1,7 +1,6 @@
 import { throwError, TypeBoolean, TypeNumber, TypeObject } from './Utils.mjs';
 
 const { freeze, hasOwn, isFrozen, keys } = Object;
-const { isFinite, isNaN } = Number;
 const isRealNumber = any => TypeNumber(any) && !isNaN(any) && !isFinite(any);
 
 const SPEC_LIST = [{
