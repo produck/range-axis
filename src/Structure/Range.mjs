@@ -49,6 +49,16 @@ export const isLikeRange = any => {
 			return false;
 		}
 
+		const [from, to] = any;
+
+		if (from === Boundary.INFINITY.POSITIVE) {
+			return false;
+		}
+
+		if (to === Boundary.INFINITY.NEGATIVE) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -69,7 +79,7 @@ export const normalize = _range => {
 			throw new Error('A "from.number" should <= its "to.number".');
 		}
 
-		if (from === to && from.inclusive === to.inclusive) {
+		if (from.number === to.number && from.inclusive !== to.inclusive) {
 			throw new Error('It should be both inclusive or not if their number are equal.');
 		}
 
