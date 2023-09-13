@@ -1,82 +1,43 @@
-import { throwError, TypeBoolean, TypeNumber, TypeObject } from './Utils.mjs';
-
-const { freeze, hasOwn, isFrozen, keys } = Object;
+import { InstanceOf, throwError, TypeNumber } from './Utils.mjs';
 
 export const isRealNumber = any => TypeNumber(any) && !isNaN(any) && isFinite(any);
 
-export const assertRealNumber = any => {
-	if (!isRealNumber(any)) {
-		throwError('Invalid number, one numeric expected.');
-	}
-};
-
-const SPEC_LIST = [{
-	test: any => TypeObject(any) && isFrozen(any),
-	message: 'It SHOULD be a frozen object.',
-}, {
-	test: any => keys(any).length === 2 && hasOwn(any, 'number') && hasOwn(any, 'inclusive'),
-	message: 'There SHOLD be only 2 properties: `.number`, `.inclusive`.',
-}, {
-	test: any => isRealNumber(any.number),
-	message: 'The `.number` MUST be a numeric.',
-}, {
-	test: any => TypeBoolean(any.inclusive),
-	message: 'The `.inclusive` MUST be a boolean.',
-}];
-
-export const isBoundary = any => {
-	if (any === INFINITY.POSITIVE) {
-		return true;
+class Boundary {
+	constructor(number, inclusive) {
+		this.number = number;
+		this.inclusive = inclusive;
+		Object.freeze(this);
 	}
 
-	if (any === INFINITY.NEGATIVE) {
-		return true;
+	get [Symbol.toStringTag]() {
+		return 'RangeAxis::Boundary';
 	}
 
-	return SPEC_LIST.every(spec => spec.test(any));
-};
+	[Symbol.toPrimitive](hint) {
+		if (hint === 'number') {
+			return this.number;
+		}
 
+		throw new Error('RangeAxis::Boundary COULD only be treated as a number.');
+	}
+}
+
+export const isBoundary = any => InstanceOf(any, Boundary);
 export const isLikeBoundary = any => isRealNumber(any) || isBoundary(any);
 
-export const assertBoundary = any => {
-	for (const sign in INFINITY) {
-		if (any === INFINITY[sign]) {
-			return;
-		}
-	}
-
-	for (const spec of SPEC_LIST) {
-		if (!spec.test(any)) {
-			throwError(spec.message);
-		}
-	}
-};
-
-const Boundary = (number, inclusive) => freeze({ number, inclusive });
-const _Inclusive = number => Boundary(number, true);
-const _Exclusive = number => Boundary(number, false);
-
-export const INFINITY = freeze({
-	POSITIVE: _Exclusive(Infinity),
-	NEGATIVE: _Exclusive(-Infinity),
+export const INFINITY = Object.freeze({
+	POSITIVE: new Boundary(Infinity, false),
+	NEGATIVE: new Boundary(-Infinity, false),
 });
 
-const Constructor = native => number => {
-	assertRealNumber(number);
-
-	return native(number);
-};
-
-export const Inclusive = Constructor(_Inclusive);
-export const Exclusive = Constructor(_Exclusive);
+export const Inclusive = number => new Boundary(number, true);
+export const Exclusive = number => new Boundary(number, false);
 export { Inclusive as I, Exclusive as E };
 
 export const normalize = _boundary => {
-	if (TypeObject(_boundary)) {
-		assertBoundary(_boundary);
-	} else {
-		assertRealNumber(_boundary);
+	if (!isLikeBoundary(_boundary)) {
+		throwError('Invalid _boundary, one "BoundaryLike" expected.');
 	}
 
-	return isBoundary(_boundary) ? _boundary : Exclusive(_boundary);
+	return isBoundary(_boundary) ? _boundary : Inclusive(_boundary);
 };
