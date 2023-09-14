@@ -1,6 +1,6 @@
 import { InstanceOf, throwError, TypeNumber } from './Utils.mjs';
 
-export const isRealNumber = any => TypeNumber(any) && !isNaN(any) && isFinite(any);
+export const isHyperRealNumber = any => TypeNumber(any) && !isNaN(any);
 
 class Boundary {
 	constructor(number, inclusive) {
@@ -23,7 +23,7 @@ class Boundary {
 }
 
 export const isBoundary = any => InstanceOf(any, Boundary);
-export const isLikeBoundary = any => isRealNumber(any) || isBoundary(any);
+export const isLikeBoundary = any => isHyperRealNumber(any) || isBoundary(any);
 
 export const INFINITY = Object.freeze({
 	POSITIVE: new Boundary(Infinity, false),
@@ -37,6 +37,14 @@ export { Inclusive as I, Exclusive as E };
 export const normalize = _boundary => {
 	if (!isLikeBoundary(_boundary)) {
 		throwError('Invalid _boundary, one "BoundaryLike" expected.');
+	}
+
+	if (_boundary === -Infinity) {
+		return INFINITY.NEGATIVE;
+	}
+
+	if (_boundary === Infinity) {
+		return INFINITY.POSITIVE;
 	}
 
 	return isBoundary(_boundary) ? _boundary : Inclusive(_boundary);

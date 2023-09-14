@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import * as Range from '../../src/Structure/Range.mjs';
 import * as Boundary from '../../src/Structure/Boundary.mjs';
 
-describe.only('::Structure::Range', function () {
+describe('::Structure::Range', function () {
 	describe('::isRange()', function () {
 		it('should get true.', function () {
 			const range = Range.normalize([1, 2]);
@@ -22,13 +22,13 @@ describe.only('::Structure::Range', function () {
 			assert.equal(Range.isLikeRange([1, 2]), true);
 			assert.equal(Range.isLikeRange(Range.normalize([1, 2])), true);
 			assert.equal(Range.isLikeRange(1), true);
+			assert.equal(Range.isLikeRange(Infinity), true);
 		});
 
 		it('should get false.', function () {
 			assert.equal(Range.isLikeRange({}), false);
 			assert.equal(Range.isLikeRange([1, 2, 3]), false);
 			assert.equal(Range.isLikeRange([null, 2]), false);
-			assert.equal(Range.isLikeRange(Infinity), false);
 			assert.equal(Range.isLikeRange([Boundary.INFINITY.POSITIVE, 1]), false);
 			assert.equal(Range.isLikeRange([1, Boundary.INFINITY.NEGATIVE]), false);
 		});

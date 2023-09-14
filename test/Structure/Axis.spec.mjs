@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import * as Axis from '../../src/Structure/Axis.mjs';
 import * as Boundary from '../../src/Structure/Boundary.mjs';
 
-describe.only('::Structure::Axis', function () {
+describe('::Structure::Axis', function () {
 	describe('::isAxis()', function () {
 		it('should get true.', function () {
 			assert.equal(Axis.isAxis(Axis.normalize([])), true);

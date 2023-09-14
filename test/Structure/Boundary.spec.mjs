@@ -3,18 +3,18 @@ import { describe, it } from 'mocha';
 
 import * as Boundary from '../../src/Structure/Boundary.mjs';
 
-describe.only('::Structure::Boundary', function () {
-	describe('::isRealNumber()', function () {
+describe('::Structure::Boundary', function () {
+	describe('::isHyperRealNumber()', function () {
 		it('should be true.', function () {
-			assert.equal(Boundary.isRealNumber(1), true);
-			assert.equal(Boundary.isRealNumber(-1), true);
-			assert.equal(Boundary.isRealNumber(-0.1), true);
+			assert.equal(Boundary.isHyperRealNumber(1), true);
+			assert.equal(Boundary.isHyperRealNumber(-1), true);
+			assert.equal(Boundary.isHyperRealNumber(-0.1), true);
+			assert.equal(Boundary.isHyperRealNumber(Infinity), true);
 		});
 
 		it('should be false.', function () {
-			assert.equal(Boundary.isRealNumber(NaN), false);
-			assert.equal(Boundary.isRealNumber(Infinity), false);
-			assert.equal(Boundary.isRealNumber('0'), false);
+			assert.equal(Boundary.isHyperRealNumber(NaN), false);
+			assert.equal(Boundary.isHyperRealNumber('0'), false);
 		});
 	});
 
@@ -40,12 +40,12 @@ describe.only('::Structure::Boundary', function () {
 			assert.ok(Boundary.isLikeBoundary(Boundary.Exclusive(0)));
 			assert.ok(Boundary.isLikeBoundary(1));
 			assert.ok(Boundary.isLikeBoundary(-1));
+			assert.ok(Boundary.isLikeBoundary(Infinity));
 		});
 
 		it('should be false.', function () {
 			assert.equal(Boundary.isLikeBoundary({}), false);
 			assert.equal(Boundary.isLikeBoundary('a'), false);
-			assert.equal(Boundary.isLikeBoundary(Infinity), false);
 		});
 	});
 
@@ -75,6 +75,9 @@ describe.only('::Structure::Boundary', function () {
 				Boundary.normalize(Boundary.INFINITY.POSITIVE),
 				Boundary.INFINITY.POSITIVE,
 			);
+
+			assert.equal(Boundary.normalize(Infinity), Boundary.INFINITY.POSITIVE);
+			assert.equal(Boundary.normalize(-Infinity), Boundary.INFINITY.NEGATIVE);
 		});
 
 		it('should from a number.', function () {
@@ -92,9 +95,9 @@ describe.only('::Structure::Boundary', function () {
 				message: 'Invalid _boundary, one "BoundaryLike" expected.',
 			};
 
-			assert.throws(() => Boundary.normalize(Infinity), expected);
-			assert.throws(() => Boundary.normalize(-Infinity), expected);
 			assert.throws(() => Boundary.normalize(null), expected);
+			assert.throws(() => Boundary.normalize({}), expected);
+			assert.throws(() => Boundary.normalize(''), expected);
 		});
 	});
 
