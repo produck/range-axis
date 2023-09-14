@@ -79,8 +79,8 @@ export const normalize = _range => {
 			throw new Error('A "from.number" should <= its "to.number".');
 		}
 
-		if (from.number === to.number && from.inclusive !== to.inclusive) {
-			throw new Error('It should be both inclusive or not if their number are equal.');
+		if (from.number === to.number && !(from.inclusive && to.inclusive)) {
+			throw new Error('It should be both inclusive if their number are equal.');
 		}
 
 		return new Range(from, to);

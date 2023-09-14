@@ -99,13 +99,13 @@ describe.only('::Structure::Boundary', function () {
 	});
 
 	describe('::Boundary()', function () {
-		describe('::<Symbol.toStringTag>', function () {
+		describe('.<Symbol.toStringTag>', function () {
 			it('should get string tag.', function () {
 				assert.equal(Boundary.INFINITY.NEGATIVE.toString(), '[object RangeAxis::Boundary]');
 			});
 		});
 
-		describe('::<Symbol.toPrimitive>', function() {
+		describe('.<Symbol.toPrimitive>', function() {
 			const boundary = Boundary.Inclusive(1);
 
 			it('should compare to a number.', function () {

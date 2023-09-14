@@ -61,13 +61,13 @@ describe.only('::Structure::Range', function () {
 			});
 		});
 
-		it('should throw if from > to.', function () {
-			const open = Boundary.Exclusive(1);
-			const close = Boundary.Inclusive(1);
+		it('should throw if from === to but not all inclusive.', function () {
+			const open = Boundary.I(1);
+			const close = Boundary.E(1);
 
 			assert.throws(() => Range.normalize([open, close]), {
 				name: 'Error',
-				message: 'It should be both inclusive or not if their number are equal.',
+				message: 'It should be both inclusive if their number are equal.',
 			});
 		});
 	});
@@ -81,7 +81,7 @@ describe.only('::Structure::Range', function () {
 			});
 		});
 
-		describe('::<Symbol.toStringTag>', function () {
+		describe('.<Symbol.toStringTag>', function () {
 			it('should get string tag', function () {
 				const range = Range.normalize(1);
 
@@ -89,7 +89,7 @@ describe.only('::Structure::Range', function () {
 			});
 		});
 
-		describe('::<Symbol.toPrimitive>', function () {
+		describe('.<Symbol.toPrimitive>', function () {
 			it('should get string representation.', function () {
 				for (const question of [{
 					range: [Boundary.E(1), 2],
