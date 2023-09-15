@@ -26,17 +26,17 @@ describe('::Algorithm', function () {
 		});
 	});
 
-	describe.only('.union()', function () {
+	describe('.union()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{
-			a: [[1, 2]],
-			b: [],
-			r: [[1, 2]],
-		}, {
 			a: [],
 			b: [],
 			r: [],
+		}, {
+			a: [[1, 2]],
+			b: [],
+			r: [[1, 2]],
 		}, {
 			a: [[1, 2]],
 			b: [[3, 4]],
@@ -57,18 +57,18 @@ describe('::Algorithm', function () {
 			a: [[0, 2], [5, 7]],
 			b: [[6, 8]],
 			r: [[0, 2], [5, 8]],
-		// }, {
-		// 	a: [[1, 1], [2, 3]],
-		// 	b: [[1, 6]],
-		// 	r: [[1, 6]],
-		// }, {
-		// 	a: [[3, 3], [6, 6]],
-		// 	b: [[1, 1]],
-		// 	r: [[1, 1], [3, 3], [6, 6]],
-		}].slice(6, 7).forEach(question => {
+		}, {
+			a: [[1, 1], [2, 3]],
+			b: [[1, 6]],
+			r: [[1, 6]],
+		}, {
+			a: [[3, 3], [6, 6]],
+			b: [[1, 1]],
+			r: [[1, 1], [3, 3], [6, 6]],
+		}].slice(0).forEach(question => {
 			const { a, b, r } = question;
 
-			it.only(`should ${stringify(a)}∪${stringify(b)}=${stringify(r)}.`, function () {
+			it(`should ${stringify(a)}∪${stringify(b)}=${stringify(r)}.`, function () {
 				assert.deepEqual([...algorithm.union(a, b)], r.map(Range.normalize));
 			});
 
@@ -79,10 +79,112 @@ describe('::Algorithm', function () {
 	});
 
 	describe('.intersection()', function () {
+		const algorithm = new RangeAxisAlgorithm();
 
+		[{
+			a: [[0, 2], [5, 7]],
+			b: [[1, 6]],
+			r: [[1, 2], [5, 6]],
+		}, {
+			a: [[0, 2], [3, 4], [5, 7]],
+			b: [[1, 6], [8, 10]],
+			r: [[1, 2], [3, 4], [5, 6]],
+		}, {
+			a: [[0, 2], [5, 7]],
+			b: [[3, 4]],
+			r: [],
+		}, {
+			a: [],
+			b: [],
+			r: [],
+		}, {
+			a: [[1, 100]],
+			b: [],
+			r: [],
+		}, {
+			a: [[1, 1], [2, 3]],
+			b: [[1, 6]],
+			r: [[1, 1], [2, 3]],
+		}, {
+			a: [[3, 3], [6, 6]],
+			b: [[1, 1]],
+			r: [],
+		}].slice(0).forEach(question => {
+			const { a, b, r } = question;
+
+			it(`should ${stringify(a)}∩${stringify(b)}=${stringify(r)}.`, function () {
+				assert.deepEqual([...algorithm.intersection(a, b)], r.map(Range.normalize));
+			});
+
+			it(`should ${stringify(b)}∩${stringify(a)}=${stringify(r)}.`, function () {
+				assert.deepEqual([...algorithm.intersection(b, a)], r.map(Range.normalize));
+			});
+		});
 	});
 
-	describe('.difference()', function () {
+	describe.only('.difference()', function () {
+		const algorithm = new RangeAxisAlgorithm();
 
+		[{
+			a: [],
+			b: [],
+			r: [],
+			s: [],
+		}, {
+			a: [[1, 10]],
+			b: [],
+			r: [[1, 10]],
+			s: [],
+		}, {
+			a: [[0, 10]],
+			b: [[1, 2], [5, 6]],
+			r: [[0, 1], [2, 5], [6, 10]],
+			s: [],
+		}, {
+			a: [[0, 3]],
+			b: [[5, 8]],
+			r: [[0, 3]],
+			s: [[5, 8]],
+		}, {
+			a: [[3, 5]],
+			b: [[0, 8]],
+			r: [],
+			s: [[0, 3], [5, 8]],
+		}, {
+			a: [[0, 5]],
+			b: [[4, 8]],
+			r: [[0, 4]],
+			s: [[5, 8]],
+		}, {
+			a: [[0, 5], [7, 9]],
+			b: [[4, 6]],
+			r: [[0, 4], [7, 9]],
+			s: [[5, 6]],
+		}, {
+			a: [[0, 10]],
+			b: [[4, 8]],
+			r: [[0, 4], [8, 10]],
+			s: [],
+		}, {
+			a: [[5, 10]],
+			b: [[4, 8]],
+			r: [[8, 10]],
+			s: [],
+		}, {
+			a: [[0, 2], [3, 4], [5, 7]],
+			b: [[1, 6], [8, 10]],
+			r: [[0, 1], [6, 7]],
+			s: [[2, 3], [4, 5], [8, 10]],
+		}].slice(6, 7).forEach(question => {
+			const { a, b, r, s } = question;
+
+			it.only(`should ${stringify(a)}-${stringify(b)}=${stringify(r)}.`, function () {
+				assert.deepEqual([...algorithm.difference(a, b)], r.map(Range.normalize));
+			});
+
+			it(`should ${stringify(b)}-${stringify(a)}=${stringify(s)}.`, function () {
+				assert.deepEqual([...algorithm.difference(b, a)], s.map(Range.normalize));
+			});
+		});
 	});
 });

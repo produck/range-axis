@@ -2,52 +2,104 @@ import { RangeAxisComparator } from './Comparator.mjs';
 import { Axis, Boundary } from './Structure/index.mjs';
 
 export class RangeAxisAlgorithm {
-	#comparator = new RangeAxisComparator();
+	#COMP = new RangeAxisComparator();
 
 	setTolerance(value) {
 		if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
 			throw new TypeError('Invalid ".value", one "numeric" expected.');
 		}
 
-		this.#comparator.tolerance = value;
+		this.#COMP.tolerance = value;
 	}
 
-	LT(a, b) {
-		return this.#comparator.lt(a, b);
-	}
-
-	union(A, B, Result) {
-		if (A.length === 0 || B.length === 0) {
-			return Result.push(...A, ...B);
-		}
-
-		const P = A[0].from.number < B[0].from.number ? A : B;
-		const S = A === P ? B : A;
-		let { from, to } = P[0];
-
-		while (P.length > 0) {
-			if (P[0].from.number > to.number) {
-				Result.push([from, to]);
-				from = P[0].from, to = P[0].to;
-			} else if (P[0].to.number > to.number) {
-				to = P[0].to;
-			}
-
-			while (S.length > 0 && P.length > 0) {
-				if (S[0].from.number > to.number) {
-					Result.push([from, to]);
-					from = S[0].from, to = S[0].to;
-				} else if (S[0].to.number > to.number) {
-					to = S[0].to;
+	#sort(list) {
+		return list.sort((a, b) => {
+			if (this.#COMP.eq(a.from.number, b.from.numberb)) {
+				if (this.#COMP.eq(a.to.number, b.to.number)) {
+					return 0;
 				}
 
-				S.shift();
+				return a.to.number - b.to.number;
 			}
 
-			P.shift();
+			return a.from.number - b.from.number;
+		});
+	}
+
+	union(A, B, R) {
+		const merged = this.#sort([...A, ...B]);
+		let { from, to } = merged.shift();
+
+		while (merged.length > 0) {
+			const range = merged.shift();
+
+			if (this.#COMP.gt(range.from.number, to.number)) {
+				R.push([from, to]);
+				from = range.from;
+			}
+
+			if (this.#COMP.gt(range.to.number, to.number)) {
+				to = range.to;
+			}
 		}
 
-		Result.push([from, to], ...P, ...S);
+		R.push([from, to]);
+	}
+
+	intersection(A, B, R) {
+		const merged = this.#sort([...A, ...B]);
+		let { from, to } = merged.shift();
+
+		while (merged.length > 0) {
+			const range = merged.shift();
+
+			if (range.from <= to) { // sensitive =?
+				from = range.from;
+
+				if (range.to <= to) {
+					R.push([range.from, range.to]);
+					from = range.to;
+				} else {
+					R.push([from, to]);
+					from = to;
+					to = range.to;
+				}
+			} else {
+				from = range.from, to = range.to;
+			}
+		}
+	}
+
+	difference(A, B, R) {
+		if (A.length === 0) {
+			return;
+		}
+
+		let from = A[0].from;
+
+		while (A.length > 0) {
+			if (B.length === 0) {
+				return R.push([from, A.shift().to], ...A);
+			}
+
+			from = A[0].from;
+
+			if (B[0].from.number >= A[0].to.number) {
+				R.push(A.shift());
+			}
+
+			while (B.length > 0 && A.length > 0 && B[0].from.number < A[0].to.number) {
+				if (B[0].from > from) {
+					R.push([from, B[0].from]);
+				}
+
+				if (B[0].to > from && B[0].to < A[0].to) {
+					from = B[0].to;
+				}
+
+				(B[0].to <= A[0].to ? B : A).shift();
+			}
+		}
 	}
 
 	constructor() {
