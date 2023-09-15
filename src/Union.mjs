@@ -1,7 +1,18 @@
-import * as Utils from './Utils.mjs';
+export const operator = (A, B, Result, C) => {
+	const merged = [...A, ...B].sort((a, b) => {
+		if (C.lt(a.from.number, b.from.number)) {
+			return -1;
+		} else if (C.gt(a.from.number, b.from.number)) {
+			return 1;
+		} else if (C.lt(a.to.number, b.to.number)) {
+			return -1;
+		} else if (C.gt(a.to.number, b.to.number)) {
+			return 1;
+		} else {
+			return 0;
+		}
+	});
 
-export const operator = (A, B, Result, {}) => {
-	const merged = [...A, ...B].sort(Utils.ASC);
 	let [from, to] = merged.shift();
 
 	while(merged.length > 0) {

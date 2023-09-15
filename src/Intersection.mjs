@@ -1,7 +1,7 @@
-import * as Utils from './Utils.mjs';
+const ASC = (a, b) => a.from.number - b.from.number || a.to.number - b.to.number;
 
 export const operator = (A, B, Result, { LE }) => {
-	const merged = [...A, ...B].sort(Utils.ASC);
+	const merged = [...A, ...B].sort(ASC);
 	let [from, to] = merged.shift();
 
 	while (merged.length > 0) {
