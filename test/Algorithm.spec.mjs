@@ -130,7 +130,7 @@ describe('::Algorithm', function () {
 		});
 	});
 
-	describe.skip('.difference()', function () {
+	describe('.difference()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{
@@ -177,13 +177,18 @@ describe('::Algorithm', function () {
 			a: [[5, 10]],
 			b: [[4, 8]],
 			r: [[8, 10]],
-			s: [],
+			s: [[4, 5]],
 		}, {
 			a: [[0, 2], [3, 4], [5, 7]],
 			b: [[1, 6], [8, 10]],
 			r: [[0, 1], [6, 7]],
 			s: [[2, 3], [4, 5], [8, 10]],
-		}].slice(6, 7).forEach(question => {
+		}, {
+			a: [[0, 2], [5, 10], [13, 23], [24, 25]],
+			b: [[1, 5], [8, 12], [15, 24], [25, 26]],
+			r: [[0, 1], [5, 8], [13, 15], [24, 25]],
+			s: [[2, 5], [10, 12], [23,24], [25, 26]],
+		}].slice(0).forEach(question => {
 			const { a, b, r, s } = question;
 
 			it(`should ${_t(a)}-${_t(b)}=${_t(r)}.`, function () {

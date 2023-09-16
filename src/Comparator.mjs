@@ -8,7 +8,6 @@ export class RangeAxisComparator {
 			return -this.tolerance < value && value < this.tolerance;
 		};
 
-		this.eq0 = x => -this.tolerance < x && x < this.tolerance;
 		this.gt = (x, y) => x - y > this.tolerance;
 		this.ge = (x, y) => x - y > -this.tolerance;
 		this.lt = (x, y) => x - y < -this.tolerance;

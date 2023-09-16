@@ -19,13 +19,14 @@ export class RangeAxisAlgorithm {
 			return R.push(...A, ...B);
 		}
 
+		const { gt, ge } = this.#COMP;
 		const merged = [...A, ...B].sort(ASC);
 
 		for (let i = 0; i < merged.length;) {
 			let to = merged[i].to, j = i + 1;
 
-			for (; j < merged.length && to.number >= merged[j].from.number; j++) {
-				if (merged[j].to.number > to.number) {
+			for (; j < merged.length && ge(to.number, merged[j].from.number); j++) {
+				if (gt(merged[j].to.number, to.number)) {
 					to = merged[j].to;
 				}
 			}
@@ -55,33 +56,31 @@ export class RangeAxisAlgorithm {
 	}
 
 	difference(A, B, R) {
-		if (A.length === 0) {
-			return;
-		}
+		for (let i = 0, j = 0; i < A.length; i++) {
+			let { from, to } = A[i];
 
-		let from = A[0].from;
+			while (j < B.length) {
+				const b = B[j];
 
-		while (A.length > 0) {
-			if (B.length === 0) {
-				return R.push([from, A.shift().to], ...A);
-			}
-
-			from = A[0].from;
-
-			if (B[0].from.number >= A[0].to.number) {
-				R.push(A.shift());
-			}
-
-			while (B.length > 0 && A.length > 0 && B[0].from.number < A[0].to.number) {
-				if (B[0].from > from) {
-					R.push([from, B[0].from]);
+				if (from.number < b.from.number && b.from.number < to.number) {
+					R.push([from, b.from]);
 				}
 
-				if (B[0].to > from && B[0].to < A[0].to) {
-					from = B[0].to;
+				if (b.to.number < to.number) {
+					if (b.to.number > from.number) {
+						from = b.to;
+					}
+
+					j++;
 				}
 
-				(B[0].to <= A[0].to ? B : A).shift();
+				if (b.to.number > to.number) {
+					break;
+				}
+			}
+
+			if (j === B.length || B[j].from.number >= to.number) {
+				R.push([from, to]);
 			}
 		}
 	}
