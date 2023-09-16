@@ -2,9 +2,9 @@ import * as assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
 
 import { RangeAxisAlgorithm } from '../src/Algorithm.mjs';
-import { Range } from '../src/Structure/index.mjs';
+import { Boundary, Range } from '../src/Structure/index.mjs';
 
-const { stringify } = JSON;
+const { stringify: _t } = JSON;
 
 describe('::Algorithm', function () {
 	it('should create an algorithm.', function () {
@@ -68,17 +68,17 @@ describe('::Algorithm', function () {
 		}].slice(0).forEach(question => {
 			const { a, b, r } = question;
 
-			it(`should ${stringify(a)}∪${stringify(b)}=${stringify(r)}.`, function () {
+			it(`should ${_t(a)}∪${_t(b)}=${_t(r)}.`, function () {
 				assert.deepEqual([...algorithm.union(a, b)], r.map(Range.normalize));
 			});
 
-			it(`should ${stringify(b)}∪${stringify(a)}=${stringify(r)}.`, function () {
+			it(`should ${_t(b)}∪${_t(a)}=${_t(r)}.`, function () {
 				assert.deepEqual([...algorithm.union(b, a)], r.map(Range.normalize));
 			});
 		});
 	});
 
-	describe('.intersection()', function () {
+	describe.only('.intersection()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{
@@ -109,20 +109,28 @@ describe('::Algorithm', function () {
 			a: [[3, 3], [6, 6]],
 			b: [[1, 1]],
 			r: [],
+		}, {
+			a: [[-Infinity, Infinity]],
+			b: [[0, 10]],
+			r: [[0, 10]],
+		}, {
+			a: [[0, Boundary.E(1)]],
+			b: [[1, 2]],
+			r: [],
 		}].slice(0).forEach(question => {
 			const { a, b, r } = question;
 
-			it(`should ${stringify(a)}∩${stringify(b)}=${stringify(r)}.`, function () {
+			it(`should ${_t(a)}∩${_t(b)}=${_t(r)}.`, function () {
 				assert.deepEqual([...algorithm.intersection(a, b)], r.map(Range.normalize));
 			});
 
-			it(`should ${stringify(b)}∩${stringify(a)}=${stringify(r)}.`, function () {
+			it(`should ${_t(b)}∩${_t(a)}=${_t(r)}.`, function () {
 				assert.deepEqual([...algorithm.intersection(b, a)], r.map(Range.normalize));
 			});
 		});
 	});
 
-	describe.only('.difference()', function () {
+	describe('.difference()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{
@@ -178,11 +186,11 @@ describe('::Algorithm', function () {
 		}].slice(6, 7).forEach(question => {
 			const { a, b, r, s } = question;
 
-			it.only(`should ${stringify(a)}-${stringify(b)}=${stringify(r)}.`, function () {
+			it(`should ${_t(a)}-${_t(b)}=${_t(r)}.`, function () {
 				assert.deepEqual([...algorithm.difference(a, b)], r.map(Range.normalize));
 			});
 
-			it(`should ${stringify(b)}-${stringify(a)}=${stringify(s)}.`, function () {
+			it(`should ${_t(b)}-${_t(a)}=${_t(s)}.`, function () {
 				assert.deepEqual([...algorithm.difference(b, a)], s.map(Range.normalize));
 			});
 		});
