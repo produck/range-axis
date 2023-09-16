@@ -1,37 +1,17 @@
 export class RangeAxisComparator {
-	#tolerance = 0.000001;
+	tolerance = 0.000001;
 
-	get tolerance() {
-		return this.#tolerance;
-	}
+	constructor() {
+		this.eq = (x, y) => {
+			const value = x - y;
 
-	set tolerance(value) {
-		this.#tolerance = value;
-	}
+			return -this.tolerance < value && value < this.tolerance;
+		};
 
-	eq0(x) {
-		return -this.#tolerance < x && x < this.#tolerance;
-	}
-
-	eq(x, y) {
-		const value = x - y;
-
-		return -this.#tolerance < value && value < this.#tolerance;
-	}
-
-	gt(x, y) {
-		return x - y > this.#tolerance;
-	}
-
-	ge(x, y) {
-		return x - y > this.#tolerance;
-	}
-
-	lt(x, y) {
-		return x - y < -this.#tolerance;
-	}
-
-	le(x, y) {
-		return x - y < this.#tolerance;
+		this.eq0 = x => -this.tolerance < x && x < this.tolerance;
+		this.gt = (x, y) => x - y > this.tolerance;
+		this.ge = (x, y) => x - y > -this.tolerance;
+		this.lt = (x, y) => x - y < -this.tolerance;
+		this.le = (x, y) => x - y < this.tolerance;
 	}
 }

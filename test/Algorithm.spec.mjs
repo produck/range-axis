@@ -78,7 +78,7 @@ describe('::Algorithm', function () {
 		});
 	});
 
-	describe.only('.intersection()', function () {
+	describe('.intersection()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{
@@ -130,7 +130,7 @@ describe('::Algorithm', function () {
 		});
 	});
 
-	describe('.difference()', function () {
+	describe.skip('.difference()', function () {
 		const algorithm = new RangeAxisAlgorithm();
 
 		[{

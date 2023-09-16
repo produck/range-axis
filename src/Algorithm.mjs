@@ -47,14 +47,16 @@ export class RangeAxisAlgorithm {
 	}
 
 	intersection(A, B, R) {
+		const { gt, le, lt, eq } = this.#COMP;
+
 		for (let i = 0, j = 0; i < A.length && j < B.length;) {
 			const a = A[i], b = B[j];
-			const from = this.#COMP.gt(a.from.number, b.from.number) ? a.from : b.from;
-			const to = this.#COMP.le(a.to.number, b.to.number) ? a.to : b.to;
+			const from = gt(a.from.number, b.from.number) ? a.from : b.from;
+			const to = le(a.to.number, b.to.number) ? a.to : b.to;
 
 			if (
-				this.#COMP.lt(from.number, to.number) ||
-				(this.#COMP.eq(from.number, to.number) && from.inclusive && to.inclusive)
+				lt(from.number, to.number) ||
+				(eq(from.number, to.number) && from.inclusive && to.inclusive)
 			) {
 				R.push([from, to]);
 			}
