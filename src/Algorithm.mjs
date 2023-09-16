@@ -1,5 +1,7 @@
 import { RangeAxisComparator } from './Comparator.mjs';
-import { Axis, Boundary } from './Structure/index.mjs';
+import { Axis } from './Structure/index.mjs';
+
+const ASC = (a, b) => a.from.number - b.from.number;
 
 export class RangeAxisAlgorithm {
 	#COMP = new RangeAxisComparator();
@@ -12,38 +14,25 @@ export class RangeAxisAlgorithm {
 		this.#COMP.tolerance = value;
 	}
 
-	#sort(list) {
-		return list.sort((a, b) => {
-			if (this.#COMP.eq(a.from.number, b.from.numberb)) {
-				if (this.#COMP.eq(a.to.number, b.to.number)) {
-					return 0;
-				}
-
-				return a.to.number - b.to.number;
-			}
-
-			return a.from.number - b.from.number;
-		});
-	}
-
 	union(A, B, R) {
-		const merged = this.#sort([...A, ...B]);
-		let { from, to } = merged.shift();
-
-		while (merged.length > 0) {
-			const range = merged.shift();
-
-			if (this.#COMP.gt(range.from.number, to.number)) {
-				R.push([from, to]);
-				from = range.from;
-			}
-
-			if (this.#COMP.gt(range.to.number, to.number)) {
-				to = range.to;
-			}
+		if (A.length === 0 || B.length === 0) {
+			return R.push(...A, ...B);
 		}
 
-		R.push([from, to]);
+		const merged = [...A, ...B].sort(ASC);
+
+		for (let i = 0; i < merged.length;) {
+			let to = merged[i].to, j = i + 1;
+
+			for (; j < merged.length && to.number >= merged[j].from.number; j++) {
+				if (merged[j].to.number > to.number) {
+					to = merged[j].to;
+				}
+			}
+
+			R.push([merged[i].from, to]);
+			i = j;
+		}
 	}
 
 	intersection(A, B, R) {

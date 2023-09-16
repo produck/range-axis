@@ -103,15 +103,6 @@ describe('::Structure::Range', function () {
 					assert.equal(`${range}`, question.result);
 				}
 			});
-
-			it('should throw if use as other primitive.', function () {
-				const range = Range.normalize(1);
-
-				assert.throws(() => 0 > range, {
-					name: 'Error',
-					message: 'RangeAxis::Range COULD only be treated as a string.',
-				});
-			});
 		});
 	});
 });

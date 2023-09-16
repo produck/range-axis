@@ -28,8 +28,6 @@ class Range {
 
 			return spanList.join('');
 		}
-
-		throw new Error('RangeAxis::Range COULD only be treated as a string.');
 	}
 }
 
