@@ -1,6 +1,6 @@
 {
 	"name": "@produck/range-axis",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "To compute axis which some integer ranges on it",
 	"main": "src/index.gen.cjs",
 	"exports": {
