@@ -22,6 +22,10 @@
 		"intersection",
 		"difference"
 	],
+	"files": [
+		"src",
+		"tsconfig.json"
+	],
 	"author": "ChaosLee",
 	"license": "MIT",
 	"devDependencies": {
