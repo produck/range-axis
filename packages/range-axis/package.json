@@ -10,7 +10,9 @@
 	"type": "module",
 	"types": "./src/index.d.ts",
 	"scripts": {
-		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999"
+		"build": "rollup -c script/rollup.config.mjs",
+		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999",
+		"prepublishOnly": " npm run build"
 	},
 	"keywords": [
 		"range",
