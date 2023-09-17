@@ -1,31 +1,22 @@
 {
-	"name": "@produck/range-axis",
-	"version": "0.0.0",
-	"description": "To compute axis which some integer ranges on it",
-	"main": "src/index.gen.cjs",
-	"exports": {
-		"import": "./src/index.mjs",
-		"require": "./src/index.gen.cjs"
-	},
-	"type": "module",
-	"types": "./src/index.d.ts",
+	"name": "@produck/range-axis-workspace",
+	"private": true,
+	"main": "index.js",
 	"scripts": {
-		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999",
-		"coverage": "c8 --exclude=**/*.spec.mjs --exclude=**/test/**/* --reporter=lcov npm run test"
+		"deps:install": "npm -v && npm i",
+		"lint": "eslint --fix packages/**/*.mjs",
+		"test": "npm run test --workspaces",
+		"coverage": "c8 --exclude=**/*.spec** --reporter=lcov npm run test",
+		"publish": "npm run lint && npm test && lerna publish --no-private"
 	},
-	"keywords": [
-		"range",
-		"axis",
-		"operator"
-	],
-	"author": "ChaosLee",
+	"author": "Chaoslee",
 	"license": "MIT",
+	"workspaces": [
+		"packages/range-axis"
+	],
 	"devDependencies": {
-		"@types/mocha": "^10.0.1",
-		"@types/node": "^20.5.9",
 		"c8": "^8.0.1",
-		"eslint": "^8.48.0",
-		"mocha": "^10.2.0",
-		"rollup": "^3.28.1"
+		"eslint": "^8.49.0",
+		"lerna": "^7.3.0"
 	}
 }

@@ -1,0 +1,31 @@
+{
+	"name": "@produck/range-axis",
+	"version": "0.0.0",
+	"description": "To compute axis which some integer ranges on it",
+	"main": "src/index.gen.cjs",
+	"exports": {
+		"import": "./src/index.mjs",
+		"require": "./src/index.gen.cjs"
+	},
+	"type": "module",
+	"types": "./src/index.d.ts",
+	"scripts": {
+		"test": "mocha \"**/*.spec.mjs\" --no-diff -t 999999999"
+	},
+	"keywords": [
+		"range",
+		"axis",
+		"intervals",
+		"union",
+		"intersection",
+		"difference"
+	],
+	"author": "ChaosLee",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/mocha": "^10.0.1",
+		"@types/node": "^20.6.2",
+		"mocha": "^10.2.0",
+		"rollup": "^3.29.2"
+	}
+}
