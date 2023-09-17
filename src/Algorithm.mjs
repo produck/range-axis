@@ -56,30 +56,30 @@ export class RangeAxisAlgorithm {
 	}
 
 	difference(A, B, R) {
-		for (let i = 0, j = 0; i < A.length; i++) {
-			let { from, to } = A[i];
+		const { lt, gt, ge } = this.#COMP;
 
-			while (j < B.length) {
+		for (let i = 0, j = 0; i < A.length; i++) {
+			let { from, to } = A[i], spent = false;
+
+			while (j < B.length && !spent) {
 				const b = B[j];
 
-				if (from.number < b.from.number && b.from.number < to.number) {
+				if (lt(from.number, b.from.number) && lt(b.from.number, to.number)) {
 					R.push([from, b.from]);
 				}
 
-				if (b.to.number < to.number) {
-					if (b.to.number > from.number) {
+				if (lt(b.to.number, to.number)) {
+					if (gt(b.to.number, from.number)) {
 						from = b.to;
 					}
 
 					j++;
 				}
 
-				if (b.to.number > to.number) {
-					break;
-				}
+				spent = gt(b.to.number, to.number);
 			}
 
-			if (j === B.length || B[j].from.number >= to.number) {
+			if (j === B.length || ge(B[j].from.number, to.number)) {
 				R.push([from, to]);
 			}
 		}
